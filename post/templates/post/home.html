@@ -1,0 +1,32 @@
+{% extends 'post/base.html' %} 
+{% block title %} Home {% endblock %} 
+{% block content %} 
+
+{% for items in post %}
+<div class="container">
+  <div class="row">
+    <div class="col-6 offset-3 my-3">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between"> 
+          <div>
+            <a href="/users/view/{{items.author.id}}"><b style="color: rgb(26, 82, 238);">{{items.author}} </b></a><br>
+            <small class="block text-sm text-gray-600 mb-2">{{ items.created_at|timesince }} ago</small>
+          </div>
+          <a href="/posts/view/{{items.id}}" class="btn btn-success mr-2">View Post</a>
+          
+        </div>
+        <div class="card-body">
+          <i>{{items.description}}</i><br />
+          <b>Blood group: </b>{{items.blood_group}}<br />
+          <b>Blood required: </b>{{items.required_bags}} bags<br />
+          <b>Address: </b> {{items.address}}<br />
+          <b>Deadline: </b>{{items.deadlineDate}} before
+          {{items.deadlineTime}}<br />
+          <b>Contact number: </b> {{items.contact_number}}
+          <br />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %} {% endblock %}

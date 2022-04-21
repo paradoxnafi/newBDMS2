@@ -1,0 +1,89 @@
+1. Start a project
+	django-admin startproject project_name
+	
+2. Run server
+	python3 manage.py runserver
+
+3. Check python executable location
+	$ python3
+	import sys
+	sys.executable
+
+4. Install different version of python in pipenv
+
+	1.  Install that version of python in system first
+		pipenv install --python 3.9
+
+5. Create a new app
+ 
+	python3 manage.py startapp appname
+
+6. To install mysqlclient in pipenv need 
+	sudo pacman -S gcc mysql #Arch linux
+	sudo apt install mysqlclient-dev #Ubuntu
+
+7. login to mysql databse and create a database
+	sudo mysql -u root
+	
+	CREATE DATABASE fakebook_test;
+
+8. Install mariadb as mysql server
+	https://www.vultr.com/docs/how-to-install-mariadb-10-3-or-mysql-8-0-on-arch-linux/
+
+9. Login to mariadb server
+	mysql -u root -p
+
+10. change mariadb root password
+	https://www.ibm.com/docs/en/spectrum-lsf-rtm/10.2.0?topic=ssl-configuring-default-root-password-mysqlmariadb
+
+11. Create a django app inside a project
+	python manage.py startapp appName
+
+12. To use HttpResponse
+	from django.http import HttpResponse
+
+13. In urls.py
+	from AppName import views
+	
+14. Use a URL in html
+	{% url 'home' %} # like a logic
+	> Then go to main project folder, urls.py, urlpaterns and add name='name'
+
+15. TO get value 
+	{{ project }}
+	> project variable will be returned from a method from views.py
+
+16. Create super user
+	python manage.py createsuperuser
+
+17. Change user password
+	python manage.py changepassword userName
+	
+18. Set media folder
+	Under STATIC_URL line in settings.py add
+		MEDIA_URL = 'media/'
+		MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
+	In models.py under the app 'portfolioApp'
+		image = models.ImageField(upload_to='portfolioApp/images/')
+	In urls.py under main project folder add
+		from django.conf.urls.static import static
+		from django.conf import settings
+		urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+	
+19. some packages
+	pip install django-crispy-forms //does not work
+	pip install django-phone-field
+
+20. Delet a superuser
+	> python manage.py shell
+	$ from django.contrib.auth.models import User
+	$ User.objects.get(username="joebloggs", is_superuser=True).delete()
+
+21. bootstrap
+	pip install django-bootstrap-v4
+	
+22. Author app
+	pip install django-author	
+
+
+

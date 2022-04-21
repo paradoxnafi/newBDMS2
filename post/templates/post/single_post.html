@@ -1,0 +1,76 @@
+{% extends 'post/base.html' %}
+{% block title %} Post Details {% endblock %} 
+
+{% block content %}
+<div class="container">
+<div class="row">
+  <div class="col-6 offset-3 my-3">
+    <div class="card">
+      <!-- Post start -->
+      <div class="card-header d-flex justify-content-between">
+        <div>
+          <b>{{post.author}}</b><br>
+          <small class="block text-sm text-gray-600 mb-2">{{ post.created_at|timesince }} ago</small>
+        </div>
+        {% if post.author.email == request.user.email%}
+        <div class="d-flex">
+          <a href="#" class="btn btn-info mr-2">Edit</a>
+          <a href="#" class="btn btn-danger">Delete</a>
+        </div>
+        {% endif%}
+      </div>
+      <div class="card-body">
+        <i>{{post.description}}</i><br />
+        <b>Blood group: </b>{{post.blood_group}}<br />
+        <b>Blood required: </b>{{post.required_bags}} bags<br />
+        <b>Address: </b> {{post.address}}<br />
+        <b>Deadline: </b>{{post.deadlineDate}} before
+        {{post.deadlineTime}}<br />
+        <b>Contact number: </b> {{post.contact_number}}
+        <br />
+      </div>
+      <!-- Post end -->
+      <!-- White comment start -->
+      <div class="card-header">
+        <b>Add a comment</b>
+      </div>
+      <div class="card-body">
+          <form action="" method="post">
+            {% csrf_token %}
+
+            {% for field in form %}
+              <div class="mb-3">
+                  
+                  {{ field }}
+              </div>
+
+              <div class="text-rose-600 text-xs">{{ field.errors }}</div>
+            {% endfor %}
+
+              <div class="flex justify-between items-center mt-8">
+                <button type="submit" class="btn btn-success">Submit</button>
+              </div>
+            </form>
+      </div>
+      <!-- White comment end -->
+      <!-- Show comments start -->
+      <div class="card-header">
+        <b>Comments...</b>
+      </div>
+      {% for items in comment %}
+        {% if post.pk == items.post.pk %}
+        <div class="card-header">
+          <b>{{ items.author }}</b> {{ items.post.pk }} <br> 
+          <small class="block text-sm text-gray-600 mb-2">{{ items.created_at|timesince }} ago</small>
+        </div>
+        <div class="card-body">
+            <p>{{ items.body }}</p>
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <!-- Show comments end -->
+  </div>
+</div>
+</div>
+{% endblock %}
