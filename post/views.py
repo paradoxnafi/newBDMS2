@@ -33,22 +33,18 @@ def single_post(request, post_id):
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
-           comment = form.save(commit=False)
-           comment.post = post
-           comment.author = request.user
-           comment.save()
-           messages.success(request, "Comment added successfully.")
-
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            messages.success(request, "Comment added successfully.")
+    resetForm = CommentForm()
+    updatedComment = Comment.objects.order_by('-created_at')
     return render(request, "post/single_post.html", {
         'post': post,
-        'form': form,
-        'comment': comment,
+        'form': resetForm,
+        'comment': updatedComment,
     })
-
-# def view_comments(request):
-#     comment = Comment.objects.order_by('-created_at')
-#     return render(request, 'post/single_post.html', {'comment': comment})
-
 
 def view_user(request, user_id):
     context = {}
@@ -57,39 +53,27 @@ def view_user(request, user_id):
     print(user_id)
     return render(request, 'auth1/profile.html', context)
 
+@login_required(login_url='loginUser')
+def edit_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    form = PostForm(instance=post)
 
-# def view_comments(request):
-#     comment = Comment.objects.order_by('created_at')
-#     return render(request, 'post/single_post.html', {'comment': comment})
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
 
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Post updated successfully.")
+            return redirect('home')
 
+    return render(request, "post/edit_post.html", {
+        'post': post,
+        'form': form
+    })
 
-
-
-
-
-
-# @login_required(login_url='loginUser')
-# def edit_post(request, pk):
-#     post = get_object_or_404(Post, pk=pk)
-#     form = PostForm(instance=feed)
-
-#     if request.method == 'POST':
-#         form = PostForm(request.POST, request.FILES, instance=feed)
-
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, "Post updated successfully.")
-#             return redirect('home')
-
-#     return render(request, "post/craetepost.html", {
-#         'feed': feed,
-#         'form': form
-#     })
-
-
-# @login_required(login_url='login')
-# def delete_post(request, pk):
-#     feed = get_object_or_404(Post, pk=pk)
-#     feed.delete()
-#     messages.success(request, "Post deleted successfully.")
+@login_required(login_url='loginUser')
+def delete_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    messages.success(request, "Post deleted successfully.")
+    return redirect('home')

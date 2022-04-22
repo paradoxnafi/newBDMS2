@@ -27,3 +27,21 @@ class CommentForm(ModelForm):
         for name, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control'})
         self.fields['body'].widget.attrs.update({'rows': '2'})
+
+
+# Post edit from
+
+# class AccountUpdateForm(forms.ModelForm):
+
+#     class Meta:
+#         model = RegisterUser
+#         fields = {'email', 'username', 'name', 'contact_number', 'address', 'date_of_birth', 'nid', 'blood_group'}
+
+#     def clean_email(self):
+#         if self.is_valid():
+#             email = self.cleaned_data['email']
+#             try:
+#                 registeruser = RegisterUser.objects.exclude(pk=self.instance.pk).get(email=email)
+#             except RegisterUser.DoesNotExist:
+#                 return email
+#             raise forms.ValidationError('Email "%s" is already in use' % registeruser.email)
