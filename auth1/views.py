@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
+# from post.models import Post
+# from post.forms import PostForm
 from .forms import RegistrationForm, LoginForm, AccountUpdateForm
 from .models import RegisterUser
 
@@ -52,10 +54,14 @@ def logoutUserView(request):
     return redirect('home')
 
 def profileUserView(request):
-    context = {}
+
     profile = RegisterUser.objects.get(id=request.user.id)
-    context['profile'] = profile
-    return render(request, 'auth1/profile.html', context)
+#    post = Post.objects.order_by('-created_at')
+    return render(request, 'auth1/profile.html', {
+        'profile': profile,
+#        'post': post,
+    })
+
 
 def updateProfileView(request):
 

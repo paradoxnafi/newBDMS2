@@ -20,7 +20,7 @@ def createpost(request):
         return redirect('home')
 
 
-# def view_single_post(request, post_id): # @shuvro
+# def view_single_post(request, post_id): 
 #     if request.method == 'GET':
 #         post = Post.objects.get(pk=post_id)
 #         return render(request, 'post/single_post.html', { 'post': post})
@@ -73,10 +73,11 @@ def edit_post(request, pk):
 
 @login_required(login_url='loginUser')
 def delete_post(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.delete()
-    # messages.success(request, "Post deleted successfully.")
-    return redirect('home')
+    if request.method == 'POST':
+        post = get_object_or_404(Post, pk=pk)
+        post.delete()
+        # messages.success(request, "Post deleted successfully.")
+        return redirect('home')
 
 @login_required(login_url='loginUser')
 def delete_comment(request, pk):
