@@ -22,6 +22,7 @@ class RegistrationForm(UserCreationForm):
 
         for name, field, in self.fields.items():
             field.widget.attrs.update({'class' : 'form-control'})
+        self.fields['contact_number'].widget.input_type = 'number'
 
 class LoginForm(forms.ModelForm):
 
@@ -75,3 +76,7 @@ class AccountUpdateForm(forms.ModelForm):
 
         for name, field, in self.fields.items():
             field.widget.attrs.update({'class' : 'form-control'})
+        self.fields['date_of_birth'].widget.input_type = 'date'
+        self.fields['contact_number'].widget.input_type = 'number'
+        self.fields['nid'].widget.input_type = 'number'
+

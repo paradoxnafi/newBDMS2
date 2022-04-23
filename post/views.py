@@ -63,7 +63,7 @@ def edit_post(request, pk):
 
         if form.is_valid():
             form.save()
-            messages.success(request, "Post updated successfully.")
+            # messages.success(request, "Post updated successfully.")
             return redirect('home')
 
     return render(request, "post/edit_post.html", {
@@ -75,5 +75,12 @@ def edit_post(request, pk):
 def delete_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
-    messages.success(request, "Post deleted successfully.")
+    # messages.success(request, "Post deleted successfully.")
+    return redirect('home')
+
+@login_required(login_url='loginUser')
+def delete_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    comment.delete()
+    # messages.success(request, "Comment deleted successfully.")
     return redirect('home')

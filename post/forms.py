@@ -1,7 +1,9 @@
 from django.forms import ModelForm
 from .models import Post, Comment
+#from django.db import models
 
 class PostForm(ModelForm):
+#    is_resolved = models.BooleanField(default=False)
     class Meta:
         model = Post
         fields = ['description', 'address', 'blood_group', 'required_bags', 'deadlineDate', 'deadlineTime', 'contact_number']
@@ -14,6 +16,7 @@ class PostForm(ModelForm):
             field.widget.attrs.update({'class' : 'form-control'})
         self.fields['deadlineDate'].widget.input_type = 'date'
         self.fields['deadlineTime'].widget.input_type = 'time'
+        self.fields['contact_number'].widget.input_type = 'number'
         self.fields['description'].widget.attrs.update({'rows' : '4'})
 
 class CommentForm(ModelForm):
