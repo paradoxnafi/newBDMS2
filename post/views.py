@@ -73,14 +73,14 @@ def edit_post(request, pk):
 
 @login_required(login_url='loginUser')
 def delete_post(request, pk):
-    if request.method == 'POST':
-        post = get_object_or_404(Post, pk=pk)
-        post.delete()
-        # messages.success(request, "Post deleted successfully.")
-        return redirect('home')
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    # messages.success(request, "Post deleted successfully.")
+    return redirect('home')
 
 @login_required(login_url='loginUser')
 def delete_comment(request, pk):
+    print(request)
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     # messages.success(request, "Comment deleted successfully.")

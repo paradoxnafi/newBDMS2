@@ -1,117 +1,118 @@
-{% extends 'post/base.html' %}
-{% block title %} Post Details {% endblock %} 
-
+{% extends 'post/base.html' %} {% block title %} Post Details {% endblock %} 
 {% block content %}
-<!-- Delete conf start -->
-<div class="modal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Modal body text goes here.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Delete conf end -->
+
+
+<!-- Modals -->
+{% include 'post/delete_post_modal.html' %}
+
+<!-- Modals End-->
+
+
 
 <div class="container">
-<div class="row">
-  <div class="col-6 offset-3 my-3">
-    <div class="card">
-      <!-- Post start -->
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <div>
-          <a href="/users/view/{{post.author.id}}"><b style="color: rgb(26, 82, 238);">{{post.author}} </b></a><br>
-          <small class="block text-sm text-gray-600 mb-2">{{ post.created_at|timesince }} ago</small>
+  <div class="row">
+    <div class="col-6 offset-3 my-3">
+      
+      <div class="card">
+        <!-- Post start -->
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <div>
+            <a href="/users/view/{{post.author.id}}"
+              ><b style="color: rgb(26, 82, 238)">{{post.author}} </b></a
+            ><br />
+            <small class="block text-sm text-gray-600 mb-2"
+              >{{ post.created_at|timesince }} ago</small
+            >
+          </div>
+          {% if post.author.email == request.user.email%}
+          <div class="d-flex">
+            <a href="{% url 'edit_post' post.id %}" class="btn btn-info me-2"
+              >Edit</a
+            >
+            <!-- <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"></button> -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deletePostModal">
+              Delete
+            </button>
+          </div>
+          {% endif%}
         </div>
-        {% if post.author.email == request.user.email%}
-        <div class="d-flex">
-          <a href="{% url 'edit_post' post.id %}" class="btn btn-info mr-2">Edit</a>
-          <a href="{% url 'delete_post' post.id %}" class="btn btn-danger delete-btn" >Delete</a>
+        <div class="card-body">
+          <i>{{post.description}}</i><br />
+          <b>Blood group: </b>{{post.blood_group}}<br />
+          <b>Blood required: </b>{{post.required_bags}} bags<br />
+          <b>Address: </b> {{post.address}}<br />
+          <b>Deadline: </b>{{post.deadlineDate}} before {{post.deadlineTime}}<br />
+          <b>Contact number: </b> {{post.contact_number}}
+          <br />
         </div>
-        {% endif%}
-      </div>
-      <div class="card-body">
-        <i>{{post.description}}</i><br />
-        <b>Blood group: </b>{{post.blood_group}}<br />
-        <b>Blood required: </b>{{post.required_bags}} bags<br />
-        <b>Address: </b> {{post.address}}<br />
-        <b>Deadline: </b>{{post.deadlineDate}} before
-        {{post.deadlineTime}}<br />
-        <b>Contact number: </b> {{post.contact_number}}
-        <br />
-      </div>
-      <!-- Post end -->
-      <!-- White comment start -->
-      {% if user.is_authenticated %}
-      <div class="card-header">
-        <b>Add a comment</b>
-      </div>
-      <div class="card-body">
+        <!-- Post end -->
+        <!-- White comment start -->
+        {% if user.is_authenticated %}
+        <div class="card-header">
+          <b>Add a comment</b>
+        </div>
+        <div class="card-body">
           <form action="" method="post">
-            {% csrf_token %}
+            {% csrf_token %} {% for field in form %}
+            <div class="mb-3">{{ field }}</div>
 
-            {% for field in form %}
-              <div class="mb-3">
-                  
-                  {{ field }}
-              </div>
-
-              <div class="text-rose-600 text-xs">{{ field.errors }}</div>
+            <div class="text-rose-600 text-xs">{{ field.errors }}</div>
             {% endfor %}
 
-              <div class="flex justify-between items-center mt-8">
-                <button type="submit" class="btn btn-success">Submit</button>
-              </div>
-            </form>
-      </div>
-      {% endif %}
-      <!-- White comment end -->
-      <!-- Show comments start -->
-      <div class="card-header">
-        <b>Comments...</b>
-      </div>
-      {% for items in comment %}
-        {% if post.pk == items.post.pk %}
-        <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="flex justify-between items-center mt-8">
+              <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+          </form>
+        </div>
+        {% endif %}
+        <!-- White comment end -->
+        <!-- Show comments start -->
+        <div class="card-header">
+          <b>Comments...</b>
+        </div>
+        {% for items in comment %} {% if post.pk == items.post.pk %}
+        {% include 'post/delete_comment_modal.html' %}
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
           <div>
-            <a href="/users/view/{{items.author.id}}"><b style="color: rgb(26, 82, 238);">{{items.author}} </b></a><br>
-            <small class="block text-sm text-gray-600 mb-2">{{ items.created_at|timesince }} ago</small>
+            <a href="/users/view/{{items.author.id}}"
+              ><b style="color: rgb(26, 82, 238)">{{items.author}} </b></a
+            ><br />
+            <small class="block text-sm text-gray-600 mb-2"
+              >{{ items.created_at|timesince }} ago</small
+            >
           </div>
           {% if items.author.email == request.user.email%}
           <div class="d-flex">
             <!-- <a href="{% url 'edit_post' post.id %}" class="btn btn-info mr-2">Edit</a> -->
-            <a href="#" class="btn btn-danger">Delete</a> 
-            <!-- {% url 'delete_comment' items.id %} -->
+
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteCommentModal">
+              Delete
+            </button>
           </div>
           {% endif %}
         </div>
         <div class="card-body">
-            <p>{{ items.body }}</p>
+          <p>{{ items.body }}</p>
         </div>
-        {% endif %}
-      {% endfor %}
+        {% endif %} {% endfor %}
+      </div>
+      <!-- Show comments end -->
     </div>
-    <!-- Show comments end -->
   </div>
 </div>
-</div>
-{% endblock %}
-
+{% endblock %} 
 {% block script %}
-<script type="text/javascript">
-  const btn = document.querySelector(".delete-btn")
-  console.log(btn)
-  btn.addEventListener("click", ()=>{
-    console.log("clicek")
-  })
-</script>
+  <!-- <script>
+    const modal = document.querySelector("#exampleModal")
+    const btn = document.querySelector(".delete-btn")
+    btn.addEventListener("click", () =>{
+      modal.style.display="block"
+      modal.style.opacity="1"
+    })
+  </script> -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 {% endblock %}
