@@ -1,8 +1,9 @@
 {% extends 'post/base.html' %} 
-{% block title %} Home {% endblock %} 
+{% block title %} My posts {% endblock %} 
 {% block content %} 
 
 {% for items in post %}
+{%  if items.author == request.user %}
 <div class="container">
   <div class="row">
     <div class="col-6 offset-3 my-3">
@@ -34,28 +35,8 @@
     </div>
   </div>
 </div>
+
+{% endif %}
 {% endfor %}
-<!-- pagination start -->
-<div class="container">
-  <div class="row">
-    <div class="col-6 offset-3 my-3">
-      <div class="card">
-        <div class="card-body "> 
-          <div> 
-            <p align="right"> 
-             {% if post.has_previous %} 
-              <a class="btn btn-primary" href="{% url 'home' %}?page={{post.previous_page_number}} "> Previous Page </a>
-             {% endif %}
-             
-             {% if post.has_next %}
-             <a class="btn btn-primary" href="{% url 'home' %}?page={{post.next_page_number}} "> Next Page </a>
-             {% endif %}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- pagination end -->
+
 {% endblock %}

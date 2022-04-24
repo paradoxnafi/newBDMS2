@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage
 from django.contrib import messages
 from auth1.models import RegisterUser
 from .models import Post, Comment
@@ -8,7 +9,21 @@ from .forms import PostForm, CommentForm
 def home(request):
 
     post = Post.objects.order_by('-created_at')
-    return render(request, 'post/home.html', {'post': post})
+    # pagination
+    p = Paginator(post, 5) # Choose how many post will display
+    page = request.GET.get('page', 1)
+    try:
+        paginated_post = p.page(page)
+        # paginated_post = p.get_page(page)
+    except EmptyPage:
+        paginated_post = p.page(1)
+
+
+    return render(request, 'post/home.html', {
+#        'post': post,
+        'post': paginated_post,
+        })
+
 
 def createpost(request):
     if request.method == 'GET':
@@ -46,6 +61,7 @@ def single_post(request, post_id):
         'comment': updatedComment,
     })
 
+
 def view_user(request, user_id):
     context = {}
     profile = RegisterUser.objects.get(id=user_id)
@@ -63,7 +79,7 @@ def edit_post(request, pk):
 
         if form.is_valid():
             form.save()
-            # messages.success(request, "Post updated successfully.")
+            messages.success(request, "Post updated successfully.")
             return redirect('home')
 
     return render(request, "post/edit_post.html", {
@@ -72,16 +88,26 @@ def edit_post(request, pk):
     })
 
 @login_required(login_url='loginUser')
+def my_posts(request):
+
+    post = Post.objects.order_by('-created_at')
+    return render(request, 'post/my_post.html', {
+        'post': post,
+        })
+    
+
+@login_required(login_url='loginUser')
 def delete_post(request, pk):
-    if request.method == 'POST':
-        post = get_object_or_404(Post, pk=pk)
-        post.delete()
-        # messages.success(request, "Post deleted successfully.")
-        return redirect('home')
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    messages.success(request, "Post deleted successfully.")
+    return redirect('home')
 
 @login_required(login_url='loginUser')
 def delete_comment(request, pk):
+    print(request)
     comment = get_object_or_404(Comment, pk=pk)
+    post_id = comment.post.id
     comment.delete()
-    # messages.success(request, "Comment deleted successfully.")
-    return redirect('home')
+    messages.success(request, "Comment deleted successfully.")
+    return redirect(f'/posts/view/{post_id}')

@@ -27,24 +27,21 @@
                         {# Checks if current user is the owner of this profile, if true renders one of the button according to the profile state, if address is empty, then complete your profile otherwise update profile#}
                         {% if request.user.email == profile.email %}
                             {% if profile.address != None %}
-                                <a href="{% url 'updateProfile'%}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Update Profile</a>
+                                <a href="{% url 'updateProfile'%}" class="btn btn-primary active" role="button" aria-pressed="true">Update Profile</a>
                             {% else %}
-                                <a href="{% url 'updateProfile'%}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Complete Your Profile</a>
+                                <a href="{% url 'updateProfile'%}" class="btn btn-primary active" role="button" aria-pressed="true">Complete Your Profile</a>
                             {% endif %}
                         {% endif %}
                     </div>
                 </div> <br>
                 <!-- user post section start -->
-                <!-- <div class="card">
+                {% if request.user.email == profile.email %}
+                <div class="card">
                     <div class="card-header">
-                        <b>My posts</b>
+                        <a href="/posts/my_posts/" class="btn btn-primary mr-2"> My Posts</a>
                     </div>
-                    <div class="card-body">
-
-                            author: {{profile.author.id}}
-
-                    </div>
-                </div> -->
+                </div>
+                {% endif %}
                 <!-- user post section end -->
             </div>
         </div>

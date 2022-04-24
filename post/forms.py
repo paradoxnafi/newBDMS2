@@ -1,12 +1,14 @@
 from django.forms import ModelForm
 from .models import Post, Comment
+
+from django import forms
 #from django.db import models
 
 class PostForm(ModelForm):
 #    is_resolved = models.BooleanField(default=False)
     class Meta:
         model = Post
-        fields = ['description', 'address', 'blood_group', 'required_bags', 'deadlineDate', 'deadlineTime', 'contact_number']
+        fields = ['description', 'address', 'blood_group', 'required_bags', 'deadlineDate', 'deadlineTime', 'contact_number', 'is_resolved']
 
     
     def __init__(self, *args, **kwargs):
@@ -18,12 +20,12 @@ class PostForm(ModelForm):
         self.fields['deadlineTime'].widget.input_type = 'time'
         self.fields['contact_number'].widget.input_type = 'number'
         self.fields['description'].widget.attrs.update({'rows' : '4'})
+        self.fields['is_resolved'].widget.attrs.update({'class' : 'form-check-input'})
 
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = ['body']
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -33,6 +35,8 @@ class CommentForm(ModelForm):
 
 
 # Post edit from
+
+
 
 # class AccountUpdateForm(forms.ModelForm):
 
