@@ -82,6 +82,7 @@ def delete_post(request, pk):
 def delete_comment(request, pk):
     print(request)
     comment = get_object_or_404(Comment, pk=pk)
+    post_id = comment.post.id
     comment.delete()
     # messages.success(request, "Comment deleted successfully.")
-    return redirect('home')
+    return redirect(f'/posts/view/{post_id}')
