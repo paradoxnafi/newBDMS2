@@ -8,6 +8,7 @@ class RegistrationForm(UserCreationForm):
     name = forms.CharField(max_length=100, help_text="Enter name")
     email = forms.EmailField(max_length=200, help_text="Enter a valid email address.")
     contact_number = forms.CharField(max_length=15, help_text="Enter valid phone number")
+    date_of_birth = forms.DateField(help_text="Enter valid phone Birth date")
     
     class Meta:
         model = RegisterUser
@@ -15,7 +16,7 @@ class RegistrationForm(UserCreationForm):
         #     'password1': forms.PasswordInput(),
         #     'password2': forms.PasswordInput(),
         #    }
-        fields = ['username', 'name', 'email',     'contact_number']
+        fields = ['username', 'name', 'email', 'contact_number', 'date_of_birth']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,6 +24,7 @@ class RegistrationForm(UserCreationForm):
         for name, field, in self.fields.items():
             field.widget.attrs.update({'class' : 'form-control'})
         self.fields['contact_number'].widget.input_type = 'number'
+        self.fields['date_of_birth'].widget.input_type = 'date'
 
 class LoginForm(forms.ModelForm):
 

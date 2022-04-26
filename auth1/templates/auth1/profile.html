@@ -32,6 +32,11 @@
                                 <a href="{% url 'updateProfile'%}" class="btn btn-primary active" role="button" aria-pressed="true">Complete Your Profile</a>
                             {% endif %}
                         {% endif %}
+                        {% if age < 18 %}
+                        <p>
+                            <div class="bg-secondary p-1 text-white"> This user is underaged. Not eligible for blood donation </div>
+                        </p>
+                        {% endif %}
                     </div>
                 </div> <br>
                 <!-- user post section start -->

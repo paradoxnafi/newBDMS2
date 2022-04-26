@@ -85,6 +85,7 @@
 22. Author app
 	pip install django-author	
 
-
+23. Install Report builder
+	pip install django-report-builder
 
 https://stackoverflow.com/questions/35875454/django-admin-extending-admin-with-custom-views

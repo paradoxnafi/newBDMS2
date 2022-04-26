@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
+from datetime import date
 # from post.models import Post
 # from post.forms import PostForm
 from .forms import RegistrationForm, LoginForm, AccountUpdateForm
@@ -56,10 +57,13 @@ def logoutUserView(request):
 def profileUserView(request):
 
     profile = RegisterUser.objects.get(id=request.user.id)
-#    post = Post.objects.order_by('-created_at')
+
+    born = request.user.date_of_birth
+    today = date.today()
+    age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
     return render(request, 'auth1/profile.html', {
         'profile': profile,
-#        'post': post,
+        'age': age,
     })
 
 

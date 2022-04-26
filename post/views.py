@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage
+from django.http import HttpResponse
 from django.contrib import messages
+from datetime import date
+import datetime
 from auth1.models import RegisterUser
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
@@ -61,6 +64,7 @@ def single_post(request, post_id):
             messages.success(request, "Comment added successfully.")
     resetForm = CommentForm()
     updatedComment = Comment.objects.order_by('-created_at')
+
     return render(request, "post/single_post.html", {
         'post': post,
         'form': resetForm,
@@ -73,7 +77,15 @@ def view_user(request, user_id):
     profile = RegisterUser.objects.get(id=user_id)
     context['profile'] = profile
     print(user_id)
-    return render(request, 'auth1/profile.html', context)
+  
+    born = profile.date_of_birth
+    today = date.today()
+    age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+    return render(request, 'auth1/profile.html', {
+        'profile': profile,
+        'age': age,
+    })
 
 @login_required(login_url='loginUser')
 def edit_post(request, pk):
@@ -128,12 +140,21 @@ def generatePDF(request):
     textob = c.beginText()
     textob.setTextOrigin(inch, inch)
     textob.setFont("Helvetica", 14)
-    # Add some text
-    lines = [
-        'line 1',
-        'line 2',
-        'line 3'
-    ]
+    
+    # Add to report
+    lines = []
+    number_of_users = RegisterUser.objects.count()
+    number_of_posts = Post.objects.count()
+    number_of_resolved_posts = Post.objects.filter(is_resolved = True).count()
+    number_of_comments = Comment.objects.count()
+    print(number_of_posts)
+
+    lines.append(f'Total user count:          {number_of_users}')
+    lines.append(f'Total post count:          {(number_of_posts)}')
+    lines.append(f'Resolved post count:   {number_of_resolved_posts}')
+    lines.append(f'Total comment count:  {number_of_comments}')
+    lines.append(' ')
+    lines.append(f'Generated from Django Admin at {datetime.datetime.now()} by "{request.user}"')
 
     for line in lines:
         textob.textLine(line)
@@ -143,4 +164,7 @@ def generatePDF(request):
     c.save()
     buf.seek(0)
 
-    return FileResponse(buf, as_attachment=True, filename='post_report.pdf')
+    if request.user.is_admin == True:
+        return FileResponse(buf, as_attachment=True, filename='System_Report.pdf')
+    else:
+        return HttpResponse("<p> You are not authorization to view this page")
