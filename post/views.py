@@ -6,6 +6,12 @@ from auth1.models import RegisterUser
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
 
+import io
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+
 def home(request):
 
     post = Post.objects.order_by('-created_at')
@@ -79,8 +85,9 @@ def edit_post(request, pk):
 
         if form.is_valid():
             form.save()
+            post_id = post.id # (1) this line 
             messages.success(request, "Post updated successfully.")
-            return redirect('home')
+            return redirect(f'/posts/view/{post_id}') # (2) and this line fixed after edit redirect issue
 
     return render(request, "post/edit_post.html", {
         'post': post,
@@ -105,9 +112,35 @@ def delete_post(request, pk):
 
 @login_required(login_url='loginUser')
 def delete_comment(request, pk):
-    print(request)
     comment = get_object_or_404(Comment, pk=pk)
     post_id = comment.post.id
     comment.delete()
     messages.success(request, "Comment deleted successfully.")
     return redirect(f'/posts/view/{post_id}')
+
+
+
+# Create your views here.
+@login_required
+def generatePDF(request):
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+    textob = c.beginText()
+    textob.setTextOrigin(inch, inch)
+    textob.setFont("Helvetica", 14)
+    # Add some text
+    lines = [
+        'line 1',
+        'line 2',
+        'line 3'
+    ]
+
+    for line in lines:
+        textob.textLine(line)
+
+    c.drawText(textob)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+
+    return FileResponse(buf, as_attachment=True, filename='post_report.pdf')

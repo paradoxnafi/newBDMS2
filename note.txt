@@ -87,3 +87,4 @@
 
 
 
+https://stackoverflow.com/questions/35875454/django-admin-extending-admin-with-custom-views

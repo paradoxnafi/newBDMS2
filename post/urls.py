@@ -10,4 +10,5 @@ urlpatterns = [
     path('posts/<int:pk>/delete/', views.delete_post, name="delete_post"),
     path('comments/<int:pk>/delete/', views.delete_comment, name="delete_comment"),
     path('posts/my_posts/', views.my_posts, name='my_posts'),
+    path('generatePDF/', views.generatePDF, name='generatePDF'),
 ]
