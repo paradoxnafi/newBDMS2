@@ -16,21 +16,18 @@
       <div class="card">
         <!-- Post start -->
         <div
-          class="card-header d-flex justify-content-between align-items-center"
-        >
+          class="card-header d-flex justify-content-between align-items-center">
           <div>
-            <a href="/users/view/{{post.author.id}}"
-              ><b style="color: rgb(26, 82, 238)">{{post.author}} </b></a
-            ><br />
-            <small class="block text-sm text-gray-600 mb-2"
-              >{{ post.created_at|timesince }} ago</small
-            >
+            {% if request.user.is_authenticated %}
+              <a href="/users/view/{{post.author.id}}"><b style="color: rgb(26, 82, 238)">{{post.author}} </b></a><br />
+            {% else %}
+            <b style="color: rgb(26, 82, 238)">{{post.author}} </b> <br>
+            {% endif %}
+            <small class="block text-sm text-gray-600 mb-2">{{ post.created_at|timesince }} ago</small>
           </div>
           {% if post.author.email == request.user.email%}
           <div class="d-flex">
-            <a href="{% url 'edit_post' post.id %}" class="btn btn-info me-2"
-              >Edit</a
-            >
+            <a href="{% url 'edit_post' post.id %}" class="btn btn-info me-2">Edit</a>
             <!-- <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"></button> -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deletePostModal">
               Delete
@@ -81,7 +78,11 @@
         <div
           class="card-header d-flex justify-content-between align-items-center">
           <div>
-            <a href="/users/view/{{items.author.id}}"><b style="color: rgb(26, 82, 238)">{{items.author}} </b></a><br />
+            {% if request.user.is_authenticated %}
+              <a href="/users/view/{{items.author.id}}"><b style="color: rgb(26, 82, 238)">{{items.author}} </b></a><br />
+            {% else %}
+            <b style="color: rgb(26, 82, 238)">{{items.author}} </b> <br>
+            {% endif %}
             <small class="block text-sm text-gray-600 mb-2">{{ items.created_at|timesince }} ago</small>
           </div>
           {% if items.author.email == request.user.email%}

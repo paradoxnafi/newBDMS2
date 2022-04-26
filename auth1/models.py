@@ -50,7 +50,7 @@ class RegisterUser(AbstractBaseUser):
 	# password2				= models.CharField(max_length=50) #admin pannel
 	contact_number			= models.CharField(max_length=15)
 	address					= models.CharField(max_length=250, null=True, blank=True)
-	date_of_birth			= models.DateField() #Fix
+	date_of_birth			= models.DateField(null=True, blank=True) #Fix
 	nid						= models.CharField(max_length=13, null=True, blank=True)
 	blood_group				= models.CharField(max_length=8, choices=BLOOD_GROUPS, null=True, blank=True)
 	date_joined				= models.DateTimeField(verbose_name='date joined', auto_now_add=True)

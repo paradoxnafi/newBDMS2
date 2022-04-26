@@ -41,6 +41,7 @@ def createpost(request):
         form = PostForm(request.POST)
         newform = form.save(commit=False)
         newform.save()
+        messages.success(request, "Post created successfully.")
         return redirect('home')
 
 
