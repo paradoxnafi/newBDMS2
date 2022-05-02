@@ -80,12 +80,15 @@ class RegisterUser(AbstractBaseUser):
 		return self.username
 
 
+# class Notification(models.Model):
+# 	user = models.ManyToManyField(RegisterUser, on_delete=models.CASCADE)
+# 	message = model.CharField()
+# #	read_status = models.BooleanField(default=False)
 
 
-
-
-
-
+# class ReadFlag(model.Model):
+# 	user = models.ManyToManyField(RegisterUser, on_delete=models.CASCADE)
+# 	read_status = models.BooleanField(default=False)
 
 
 

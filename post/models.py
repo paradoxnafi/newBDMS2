@@ -35,5 +35,4 @@ class Comment(models.Model):
 
     def __str__(self):
         return str(self.author) + " commented at " + str(self.post.author) + "'s post" + ", " + str(self.body)
-
-
+        

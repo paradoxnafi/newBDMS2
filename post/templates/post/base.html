@@ -14,7 +14,7 @@
 
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="{% url 'home'%}">Home</a>
+			<a class="navbar-brand" href="{% url 'home'%}"> <b class="text-primary"> Blood Donor </b><span>Management</span> </a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 			</button>
@@ -27,6 +27,8 @@
 			</ul>
 			{% if user.is_authenticated %}
 				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="auth1/user/{{user.id}}/notifications"> Notifications <span>(1)</span> </a>
 					<li class="nav-item">
 						<a class="nav-link" href="{% url 'createpost' %}">Create New Post</a>
 					</li>

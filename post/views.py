@@ -169,3 +169,4 @@ def generatePDF(request):
         return FileResponse(buf, as_attachment=True, filename='System_Report.pdf')
     else:
         return HttpResponse("<p> You are not authorization to view this page")
+

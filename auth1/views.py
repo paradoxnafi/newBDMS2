@@ -97,3 +97,5 @@ def updateProfileView(request):
     return render(request, 'auth1/update_profile.html', context)
 
 
+def view_notifications(request, pk):
+    return render(request, 'auth1/notifications.html')

@@ -11,4 +11,5 @@ urlpatterns = [
     path('comments/<int:pk>/delete/', views.delete_comment, name="delete_comment"),
     path('posts/my_posts/', views.my_posts, name='my_posts'),
     path('Admin/generate_report', views.generatePDF, name='generatePDF'),
+    # path('/user/<int:pk>/notifications', views.view_notifications, name='view_notifications'),
 ]
