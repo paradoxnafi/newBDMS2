@@ -88,4 +88,10 @@
 23. Install Report builder
 	pip install django-report-builder
 
+
+24. Gmail app password
+	hrynxodixbdorlyp
+
+{% block total_unread_notifications %} {% endblock %}
+	
 https://stackoverflow.com/questions/35875454/django-admin-extending-admin-with-custom-views

@@ -4,7 +4,7 @@ from datetime import date
 # from post.models import Post
 # from post.forms import PostForm
 from .forms import RegistrationForm, LoginForm, AccountUpdateForm
-from .models import RegisterUser
+from .models import RegisterUser, Notification
 
 def loginUserView(request):
 
@@ -47,6 +47,18 @@ def registerUserView(request):
     else:
         form = RegistrationForm()
         context['registration_form'] = form
+
+    # subject = "Account created successfuly"
+    # message = f" Hey {request.user.name}, your account was created successfuly. Click http://127.0.0.1:8000/posts/view/{newform.pk} to visit your post"
+    # recipient = f"{request.user.email}"
+    # send_mail(
+    #     subject,
+    #     message,
+    #     settings.EMAIL_HOST_USER,
+    #     [recipient],
+    #     fail_silently = False
+    # )
+
     return render(request, 'auth1/register.html', context)
 
 
@@ -98,4 +110,17 @@ def updateProfileView(request):
 
 
 def view_notifications(request, pk):
-    return render(request, 'auth1/notifications.html')
+    user = request.user.id
+    notifications = Notification.objects.filter(receiver=user)
+    unread_notifications = Notification.objects.filter(receiver=user).exclude(read_by=user)
+    total_unread_notifications = len(unread_notifications)
+    return render(request, 'auth1/notifications.html', {
+        'notifications': notifications,
+        'total_unread_notifications': total_unread_notifications,
+    })
+
+def mark_as_read(request, pk):
+    user = RegisterUser.objects.filter(pk=request.user.id)
+    notification = Notification.objects.get(id=pk)
+    notification.read_by.set(user)
+    return redirect(f"/posts/view/{notification.context}")

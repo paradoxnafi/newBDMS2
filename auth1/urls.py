@@ -8,4 +8,5 @@ urlpatterns = [
     path('profile/', views.profileUserView, name='profileUser'),
     path('updateProfile/', views.updateProfileView, name='updateProfile'),
     path('user/<int:pk>/notifications', views.view_notifications, name='view_notifications'),
+    path('mark_as_read/<int:pk>', views.mark_as_read, name='mark_as_read'),
 ]

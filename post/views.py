@@ -4,8 +4,10 @@ from django.core.paginator import Paginator, EmptyPage
 from django.http import HttpResponse
 from django.contrib import messages
 from datetime import date
+from django.core.mail import send_mail
+from django.conf import settings
 import datetime
-from auth1.models import RegisterUser
+from auth1.models import RegisterUser, Notification
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
 
@@ -27,9 +29,12 @@ def home(request):
     except EmptyPage:
         paginated_post = p.page(1)
 
+    # user = request.user.id
+    # unread_notifications = Notification.objects.filter(receiver=user).exclude(read_by=user)
+    # total_unread_notifications = len(unread_notifications)
 
     return render(request, 'post/home.html', {
-#        'post': post,
+        # 'total_unread_notifications': total_unread_notifications,
         'post': paginated_post,
         })
 
@@ -41,7 +46,30 @@ def createpost(request):
         form = PostForm(request.POST)
         newform = form.save(commit=False)
         newform.save()
+#        print(newform.pk)
+        asking_blood_group = newform.blood_group
+
+        users = RegisterUser.objects.filter(blood_group=asking_blood_group).exclude(id=request.user.id)
+        message = f"{request.user} needs {asking_blood_group},"
+        notification = Notification.objects.create(message=message, context=newform.pk)
+        notification.receiver.set(users)
+
         messages.success(request, "Post created successfully.")
+
+        subject = "Post created successfuly"
+        message = f" Hey {request.user.name}, your post was created successfuly. Click http://127.0.0.1:8000/posts/view/{newform.pk} to visit your post"
+        recipient = f"{request.user.email}"
+        send_mail(
+            subject,
+            message,
+            settings.EMAIL_HOST_USER,
+            [recipient],
+            fail_silently = False
+        )
+        # print('Email sent')
+        # print(message)
+        # print(recipient)
+
         return redirect('home')
 
 
@@ -63,6 +91,15 @@ def single_post(request, post_id):
             comment.author = request.user
             comment.save()
             messages.success(request, "Comment added successfully.")
+        
+        user = RegisterUser.objects.filter(pk=post.author.id)
+        if request.user.id != user[0].id: 
+            message = f"{request.user} commented on your post"
+            notification = Notification.objects.create(message=message, context=post_id)
+            notification.receiver.set(user)
+
+            
+
     resetForm = CommentForm()
     updatedComment = Comment.objects.order_by('-created_at')
 

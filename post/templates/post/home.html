@@ -1,5 +1,6 @@
 {% extends 'post/base.html' %} 
-{% block title %} Home {% endblock %} 
+{% block title %} Home {% endblock %}
+{% block total_unread_notifications %} {{ total_unread_notifications }} {% endblock %} 
 {% block content %} 
 
 {% for items in post %}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 BLOOD_GROUPS = [
@@ -80,10 +81,14 @@ class RegisterUser(AbstractBaseUser):
 		return self.username
 
 
-# class Notification(models.Model):
-# 	user = models.ManyToManyField(RegisterUser, on_delete=models.CASCADE)
-# 	message = model.CharField()
-# #	read_status = models.BooleanField(default=False)
+class Notification(models.Model):
+	message = models.CharField(max_length=255)
+	receiver = models.ManyToManyField(RegisterUser, related_name='receiver')
+	read_by = models.ManyToManyField(RegisterUser, related_name='read_by', blank=True, null=True)
+	context = models.IntegerField(null=True)
+	creation_date = models.DateTimeField(default=timezone.now)
+	
+
 
 
 # class ReadFlag(model.Model):
