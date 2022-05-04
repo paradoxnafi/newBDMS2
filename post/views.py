@@ -25,16 +25,10 @@ def home(request):
     page = request.GET.get('page', 1)
     try:
         paginated_post = p.page(page)
-        # paginated_post = p.get_page(page)
     except EmptyPage:
         paginated_post = p.page(1)
 
-    # user = request.user.id
-    # unread_notifications = Notification.objects.filter(receiver=user).exclude(read_by=user)
-    # total_unread_notifications = len(unread_notifications)
-
     return render(request, 'post/home.html', {
-        # 'total_unread_notifications': total_unread_notifications,
         'post': paginated_post,
         })
 
@@ -54,29 +48,20 @@ def createpost(request):
         notification = Notification.objects.create(message=message, context=newform.pk)
         notification.receiver.set(users)
 
-        messages.success(request, "Post created successfully.")
-
-        subject = "Post created successfuly"
-        message = f" Hey {request.user.name}, your post was created successfuly. Click http://127.0.0.1:8000/posts/view/{newform.pk} to visit your post"
-        recipient = f"{request.user.email}"
-        send_mail(
-            subject,
-            message,
-            settings.EMAIL_HOST_USER,
-            [recipient],
-            fail_silently = False
-        )
-        # print('Email sent')
-        # print(message)
-        # print(recipient)
+        # messages.success(request, "Post created successfully.")
+        # Send email for creating new post.
+        # subject = "Post created successfuly"
+        # message = f" Hey {request.user.name}, your post was created successfuly. Click http://127.0.0.1:8000/posts/view/{newform.pk} to visit your post"
+        # recipient = f"{request.user.email}"
+        # send_mail(
+        #     subject,
+        #     message,
+        #     settings.EMAIL_HOST_USER,
+        #     [recipient],
+        #     fail_silently = False
+        # )
 
         return redirect('home')
-
-
-# def view_single_post(request, post_id): 
-#     if request.method == 'GET':
-#         post = Post.objects.get(pk=post_id)
-#         return render(request, 'post/single_post.html', { 'post': post})
 
 def single_post(request, post_id):
     form = CommentForm()
@@ -90,7 +75,19 @@ def single_post(request, post_id):
             comment.post = post
             comment.author = request.user
             comment.save()
-            messages.success(request, "Comment added successfully.")
+            # messages.success(request, "Comment added successfully.")
+            # Send email for comments
+            # subject = f"{request.user.name} commented on your post"
+            # post_author = RegisterUser.objects.get(pk=post.author.pk)
+            # message = f" Hey {post_author.name}, {request.user.name} commented on your post. Click http://127.0.0.1:8000/posts/view/{post_id} to visit your post."
+            # recipient = f"{post.author.email}"
+            # send_mail(
+            #     subject,
+            #     message,
+            #     settings.EMAIL_HOST_USER,
+            #     [recipient],
+            #     fail_silently = False
+            # )
         
         user = RegisterUser.objects.filter(pk=post.author.id)
         if request.user.id != user[0].id: 
@@ -98,15 +95,20 @@ def single_post(request, post_id):
             notification = Notification.objects.create(message=message, context=post_id)
             notification.receiver.set(user)
 
-            
-
     resetForm = CommentForm()
     updatedComment = Comment.objects.order_by('-created_at')
+
+    profile = RegisterUser.objects.get(id=request.user.id)
+    born = request.user.date_of_birth
+    today = date.today()
+    age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
     return render(request, "post/single_post.html", {
         'post': post,
         'form': resetForm,
         'comment': updatedComment,
+        'profile': profile,
+        'age': age
     })
 
 
@@ -136,7 +138,7 @@ def edit_post(request, pk):
         if form.is_valid():
             form.save()
             post_id = post.id # (1) this line 
-            messages.success(request, "Post updated successfully.")
+            # messages.success(request, "Post updated successfully.")
             return redirect(f'/posts/view/{post_id}') # (2) and this line fixed after edit redirect issue
 
     return render(request, "post/edit_post.html", {
@@ -157,7 +159,7 @@ def my_posts(request):
 def delete_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
-    messages.success(request, "Post deleted successfully.")
+    # messages.success(request, "Post deleted successfully.")
     return redirect('home')
 
 @login_required(login_url='loginUser')
@@ -165,7 +167,7 @@ def delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     post_id = comment.post.id
     comment.delete()
-    messages.success(request, "Comment deleted successfully.")
+    # messages.success(request, "Comment deleted successfully.")
     return redirect(f'/posts/view/{post_id}')
 
 

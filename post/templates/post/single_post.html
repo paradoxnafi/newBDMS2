@@ -16,7 +16,7 @@
         >
           <div>
             {% if request.user.is_authenticated %}
-            <a href="/users/view/{{post.author.id}}"
+            <a href="/users/view/{{post.author.id}}" class="text-decoration-none"
               ><b style="color: rgb(26, 82, 238)">{{post.author}} </b></a
             ><br />
             {% else %}
@@ -53,8 +53,34 @@
           <br />
         </div>
         <!-- Post end -->
-        <!-- White comment start -->
-        {% if user.is_authenticated %} {% if not post.is_resolved %}
+        <!-- Write comment start -->
+        {% if user.is_authenticated %}
+        {% if age < 18 or profile.address == None or profile.blood_group == None or profile.nid == None %}
+          {% if request.user == post.author and not post.is_resolved %}
+
+          <!-- writing commnet part again -->
+          <div class="card-header">
+            <b>Add a comment</b>
+          </div>
+          <div class="card-body">
+            <form action="" method="post">
+              {% csrf_token %} {% for field in form %}
+              <div class="mb-3">{{ field }}</div>
+  
+              <div class="text-rose-600 text-xs">{{ field.errors }}</div>
+              {% endfor %}
+  
+              <div class="flex justify-between items-center mt-8">
+                <button type="submit" class="btn btn-success">Submit</button>
+              </div>
+            </form>
+          </div>
+
+
+          {% else %}
+            <div class="bg-secondary p-1 text-white">You are not a donor</div>
+          {% endif %}
+        {% elif not post.is_resolved %}
         <div class="card-header">
           <b>Add a comment</b>
         </div>
@@ -72,8 +98,9 @@
           </form>
         </div>
         {% else %}
-        <div class="bg-success p-1 text-white">This post has been Resolved</div>
-        {% endif %} {% endif %}
+          <div class="bg-success p-1 text-white">This post has been Resolved</div>       
+        {% endif %} 
+        {% endif %}
         <!-- White comment end -->
         <!-- Show comments start -->
         <div class="card-header">
@@ -86,7 +113,7 @@
         >
           <div>
             {% if request.user.is_authenticated %}
-            <a href="/users/view/{{items.author.id}}"
+            <a href="/users/view/{{items.author.id}}" class="text-decoration-none"
               ><b style="color: rgb(26, 82, 238)">{{items.author}} </b></a
             ><br />
             {% else %}

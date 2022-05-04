@@ -23,6 +23,7 @@ class Post(models.Model):
     contact_number = models.CharField(max_length=15)
     created_at = models.DateTimeField(auto_now_add=True)
     is_resolved = models.BooleanField(default=False, blank=True)
+    admin_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.author) + ", " + str(self.blood_group) + ", " + str(self.address)

@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
+from django.core.mail import send_mail
+from django.conf import settings
 from datetime import date
 # from post.models import Post
 # from post.forms import PostForm
@@ -41,23 +43,27 @@ def registerUserView(request):
             raw_password = form.cleaned_data.get('password1') #No changes for fixing pass fields in amdin
             account = authenticate(email=email, password=raw_password)
             login(request, account)
+
+            # Send email for new registration
+            # subject = "Account created successfuly"
+            # message = f" Hey {request.user.name}, your account was created successfuly. Click http://127.0.0.1:8000/ to continue to visit Blood Donor System"
+            # recipient = f"{request.user.email}"
+            # send_mail(
+            #     subject,
+            #     message,
+            #     settings.EMAIL_HOST_USER,
+            #     [recipient],
+            #     fail_silently = False
+            # )
+
             return redirect('home')
+            
         else:
             context['registration_form'] = form
+
     else:
         form = RegistrationForm()
         context['registration_form'] = form
-
-    # subject = "Account created successfuly"
-    # message = f" Hey {request.user.name}, your account was created successfuly. Click http://127.0.0.1:8000/posts/view/{newform.pk} to visit your post"
-    # recipient = f"{request.user.email}"
-    # send_mail(
-    #     subject,
-    #     message,
-    #     settings.EMAIL_HOST_USER,
-    #     [recipient],
-    #     fail_silently = False
-    # )
 
     return render(request, 'auth1/register.html', context)
 

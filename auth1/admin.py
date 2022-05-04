@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from  django.contrib.auth.models  import  Group
+from django.contrib.auth.models import Group
+from django import forms
 from .models import RegisterUser, Notification
 
 class AccountAdmin(UserAdmin):
@@ -12,7 +13,11 @@ class AccountAdmin(UserAdmin):
     list_filter = ()
     fieldsets = ()
 
-#my_models = [RegisterUser, AccountAdmin, Notification] # AccountAdmin
+# class RegisterUserAdmin(forms.ModelForm):
+#     class Meta:
+#         model = RegisterUser
+#         exclude = ['password']
+
 
 admin.site.register(RegisterUser, AccountAdmin)
 admin.site.register(Notification)

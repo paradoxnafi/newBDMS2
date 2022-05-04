@@ -38,16 +38,16 @@
 						<a type="button" class="nav-link position-relative me-3 " data-bs-toggle="dropdown"
 							aria-expanded="false" href="/auth1/user/{{user.id}}/notifications">
 							Notifications
-							{% if total_unread_notifications > 0 %}
+							
 							<span
 								class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger">
 								{{ total_unread_notifications }}
 
 							</span>
-							{% endif %}
+							
 						</a>
 
-						{% if total_unread_notifications > 0 %}
+						
 						<ul class="dropdown-menu">
 
 							{% for notification in notifications %}
@@ -55,20 +55,15 @@
 							<li class="font-weight-bold mr-3 dropdown-item">
 								<a href="/auth1/mark_as_read/{{notification.id}}" class="text-decoration-none">
 									<div class="mb-2">{{ notification.message }}</div>
-									<div class="mb-2">{{ notification.creation_date }}</div>
-									<!-- <a href="#" class="text-secondary" >Mark as read</a> -->
+									<div class="mb-2">{{ notification.creation_date|timesince }} ago</div>
+
 								</a>
 							</li>
 							{% endfor %}
 						</ul>
-						{% endif %}
+						
 
 					</li>
-
-
-
-
-
 					<li class="nav-item">
 						<a class="nav-link" href="{% url 'createpost' %}">Create New Post</a>
 					</li>
@@ -100,33 +95,11 @@
 		{% block content %}
 
 		{% endblock %}
-
 	</div>
 
 	{% block script %}
 	{% bootstrap_javascript %}
 
 	{% endblock %}
-
-
-	<!-- <script>
-	function search_animal() {
-		let input = document.getElementById('searchbar').value
-		input=input.toLowerCase();
-		let x = document.getElementsByClassName('blood-class');
-		
-		for (i = 0; i < x.length; i++) { 
-			if (!x[i].innerHTML.toLowerCase().includes(input)) {
-				x[i].style.display="none";
-			}
-			else {
-				x[i].style.display="list-item";                 
-			}
-		}
-	}
-</script> -->
-
-
 </body>
-
 </html>
