@@ -4,6 +4,7 @@
 {% block content %} 
 
 {% for items in post %}
+{% if items.admin_approved == True %}
 <div class="container">
   <div class="row">
     <div class="col-6 offset-3 my-3">
@@ -39,6 +40,7 @@
     </div>
   </div>
 </div>
+{% endif %}
 {% endfor %}
 <!-- pagination start -->
 <div class="container">

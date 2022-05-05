@@ -19,7 +19,7 @@ from reportlab.lib.pagesizes import letter
 
 def home(request):
 
-    post = Post.objects.order_by('-created_at')
+    post = Post.objects.filter(admin_approved=True).order_by('-created_at')
     # pagination
     p = Paginator(post, 5) # Choose how many post will display
     page = request.GET.get('page', 1)
@@ -48,10 +48,10 @@ def createpost(request):
         notification = Notification.objects.create(message=message, context=newform.pk)
         notification.receiver.set(users)
 
-        # messages.success(request, "Post created successfully.")
+        messages.success(request, "Your post is under review by an admin. It will be visible to everyone shortly.")
         # Send email for creating new post.
-        # subject = "Post created successfuly"
-        # message = f" Hey {request.user.name}, your post was created successfuly. Click http://127.0.0.1:8000/posts/view/{newform.pk} to visit your post"
+        # subject = "Your post is under review by and admin"
+        # message = f" Hey {request.user.name}, your post is under review by an admin. It will be visible to everyone shortly. Click http://127.0.0.1:8000/posts/view/{newform.pk} to edit your post."
         # recipient = f"{request.user.email}"
         # send_mail(
         #     subject,
@@ -209,3 +209,21 @@ def generatePDF(request):
     else:
         return HttpResponse("<p> You are not authorization to view this page")
 
+# send notification and email after post is approved
+# def if_post_approved(request):
+    # users = RegisterUser.objects.filter(blood_group=asking_blood_group).exclude(id=request.user.id)
+    # message = f"{request.user} needs {asking_blood_group},"
+    # notification = Notification.objects.create(message=message, context=newform.pk)
+    # notification.receiver.set(users)
+
+    # Send email for creating new post.
+    # subject = "Your post is under review by and admin"
+    # message = f" Hey {request.user.name}, your post is under review by an admin. It will be visible to everyone shortly. Click http://127.0.0.1:8000/posts/view/{newform.pk} to edit your post."
+    # recipient = f"{request.user.email}"
+    # send_mail(
+    #     subject,
+    #     message,
+    #     settings.EMAIL_HOST_USER,
+    #     [recipient],
+    #     fail_silently = False
+    # )
