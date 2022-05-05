@@ -1,0 +1,60 @@
+{% extends 'post/base.html' %}
+
+{% block title %} Profile | {{ user.username }}  {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-6 offset-3 my-3">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center"> 
+                        <b>Profile</b>
+                    </div>
+                    <div class="card-body">
+                        <b>Name: </b>{{ profile.name }}<br/>
+                        <b>Username: </b>{{ profile.username }}<br/>
+                        <b>E-mail: </b>{{ profile.email }}<br/>
+                        <b>Contact Number: </b>{{ profile.contact_number }}<br/>
+                        
+                        {# Checks if address in not empty then renders #}
+                        {% if profile.address != None and profile.blood_group != None and profile.nid != None  %} 
+                            <b>Address: </b>{{ profile.address }}<br/>
+                            <b>Date of Birth: </b>{{ profile.date_of_birth }}<br/>
+                            <!-- <b>NID Number: </b>{{ profile.nid }}<br/> -->
+                            <b>Blood group: </b>{{ profile.blood_group }}<br/>
+                        {% endif %}
+                        
+
+                        {# Checks if current user is the owner of this profile, if true renders one of the button according to the profile state, if address is empty, then complete your profile otherwise update profile#}
+                        {% if request.user.email == profile.email %}
+                            {% if profile.address != None and profile.blood_group != None and profile.nid != None %}
+                                <a href="{% url 'updateProfile'%}" class="btn btn-primary active" role="button" aria-pressed="true">Update Profile</a>
+                            {% else %}
+                                <a href="{% url 'updateProfile'%}" class="btn btn-primary active" role="button" aria-pressed="true">Complete Your Profile</a>
+                            {% endif %}
+                        {% endif %}
+                        {% if age < 18 %}
+                        <p>
+                            <div class="bg-secondary p-1 text-white"> This user is underaged. Not eligible for blood donation </div>
+                        </p>
+                        {% elif profile.address == None or profile.blood_group == None or profile.nid == None %}
+                        <p>
+                            <div class="bg-secondary p-1 text-white"> Not a donor. Not eligible for blood donation </div>
+                        </p>
+                        {% endif %}
+                    </div>
+                </div> <br>
+                <!-- user post section start -->
+                {% if request.user.email == profile.email %}
+                <div class="card">
+                    <div class="card-header">
+                        <a href="/posts/my_posts/" class="btn btn-primary mr-2"> My Posts</a>
+                    </div>
+                </div>
+                {% endif %}
+                <!-- user post section end -->
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

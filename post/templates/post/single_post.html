@@ -1,0 +1,169 @@
+{% extends 'post/base.html' %} {% block title %} Post Details {% endblock %} 
+{% block content %}
+
+<!-- Modals -->
+{% include 'post/delete_post_modal.html' %}
+
+<!-- Modals End-->
+
+<div class="container">
+  <div class="row">
+    <div class="col-6 offset-3 my-3">
+      <div class="card">
+        <!-- Post start -->
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <div>
+            {% if request.user.is_authenticated %}
+            <a href="/users/view/{{post.author.id}}" class="text-decoration-none"
+              ><b style="color: rgb(26, 82, 238)">{{post.author}} </b></a
+            ><br />
+            {% else %}
+            <b style="color: rgb(26, 82, 238)">{{post.author}} </b> <br />
+            {% endif %}
+            <small class="block text-sm text-gray-600 mb-2"
+              >{{ post.created_at|timesince }} ago</small
+            >
+          </div>
+          {% if post.author.email == request.user.email%}
+          <div class="d-flex">
+            <a href="{% url 'edit_post' post.id %}" class="btn btn-info me-2"
+              >Edit</a
+            >
+            <!-- <button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"></button> -->
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#deletePostModal"
+            >
+              Delete
+            </button>
+          </div>
+          {% endif%}
+        </div>
+        <div class="card-body">
+          <i>{{post.description}}</i><br />
+          <b>Blood group: </b>{{post.blood_group}}<br />
+          <b>Blood required: </b>{{post.required_bags}} bags<br />
+          <b>Address: </b> {{post.address}}<br />
+          <b>Deadline: </b>{{post.deadlineDate}} before {{post.deadlineTime}}<br />
+          <b>Contact number: </b> {{post.contact_number}}
+          <br />
+        </div>
+        <!-- Post end -->
+        <!-- Write comment start -->
+        {% if user.is_authenticated %}
+        {% if age < 18 or profile.address == None or profile.blood_group == None or profile.nid == None %}
+          {% if request.user == post.author and not post.is_resolved %}
+
+          <!-- writing commnet part again -->
+          <div class="card-header">
+            <b>Add a comment</b>
+          </div>
+          <div class="card-body">
+            <form action="" method="post">
+              {% csrf_token %} {% for field in form %}
+              <div class="mb-3">{{ field }}</div>
+  
+              <div class="text-rose-600 text-xs">{{ field.errors }}</div>
+              {% endfor %}
+  
+              <div class="flex justify-between items-center mt-8">
+                <button type="submit" class="btn btn-success">Submit</button>
+              </div>
+            </form>
+          </div>
+
+
+          {% else %}
+            <div class="bg-secondary p-1 text-white">You are not a donor</div>
+          {% endif %}
+        {% elif not post.is_resolved %}
+        <div class="card-header">
+          <b>Add a comment</b>
+        </div>
+        <div class="card-body">
+          <form action="" method="post">
+            {% csrf_token %} {% for field in form %}
+            <div class="mb-3">{{ field }}</div>
+
+            <div class="text-rose-600 text-xs">{{ field.errors }}</div>
+            {% endfor %}
+
+            <div class="flex justify-between items-center mt-8">
+              <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+          </form>
+        </div>
+        {% else %}
+          <div class="bg-success p-1 text-white">This post has been Resolved</div>       
+        {% endif %} 
+        {% endif %}
+        <!-- White comment end -->
+        <!-- Show comments start -->
+        <div class="card-header">
+          <b>Comments...</b>
+        </div>
+        {% include 'post/delete_comment_modal.html' %}
+        {% for items in comment %} {% if post.pk == items.post.pk %} 
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <div>
+            {% if request.user.is_authenticated %}
+            <a href="/users/view/{{items.author.id}}" class="text-decoration-none"
+              ><b style="color: rgb(26, 82, 238)">{{items.author}} </b></a
+            ><br />
+            {% else %}
+            <b style="color: rgb(26, 82, 238)">{{items.author}} </b> <br />
+            {% endif %}
+            <small class="block text-sm text-gray-600 mb-2"
+              >{{ items.created_at|timesince }} ago</small
+            >
+          </div>
+          {% if items.author.email == request.user.email%}
+          <div class="d-flex">
+            <!-- <a href="{% url 'edit_post' post.id %}" class="btn btn-info mr-2">Edit</a> -->
+
+            <button
+              data-comment-target="{{ items.id }}"
+              type="button"
+              class="btn btn-primary delete__btn"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteCommentModal"
+              
+            >
+              Delete
+            </button>
+          </div>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          <p>{{ items.body }}</p>
+        </div>
+        {% endif %} {% endfor %}
+      </div>
+      <!-- Show comments end -->
+    </div>
+  </div>
+</div>
+{% endblock %} {% block script %}
+<script>
+  const modal = document.querySelector("#exampleModal");
+  const buttons = document.querySelectorAll(".delete__btn");
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.getAttribute("data-comment-target");
+    document.querySelector("#delete__btn").href = `/comments/${target}/delete`;
+    console.log(target)
+    })
+  })
+</script>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+  crossorigin="anonymous"
+></script>
+{% endblock %}

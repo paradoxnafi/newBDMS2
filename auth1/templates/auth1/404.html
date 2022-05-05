@@ -1,0 +1,26 @@
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_messages %}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not found</title>
+</head>
+
+<body>
+    <div class="container-fluid vh-100 d-flex justify-content-center align-items-center flex-column">
+        <img src="{% static 'auth1/404.png' %}" alt="404">
+        <h1>Oops! Seems like you are lost</h1>
+        <a href="/" class="btn btn-success mt-3 text-decoration-none">Back to home</a>
+    </div>
+
+</body>
+
+</html>

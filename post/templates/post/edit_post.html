@@ -1,0 +1,50 @@
+{% extends 'post/base.html' %}
+{% block title %} Edit Post {% endblock %} 
+
+{% block content %}
+<div class="container">
+<div class="row">
+  <div class="col-6 offset-3 my-3">
+    <div class="card">
+      <!-- Post start -->
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <b>Edit Post</b>
+      </div>
+      <div class="card-body">
+        <form action="" method="post">
+                {% csrf_token %}              
+                Description: {{form.description}} </br>
+                Address: {{form.address}} </br>
+                Blood Group: {{form.blood_group}} </br>
+                Required Bags: {{form.required_bags}} </br>
+                Deadline Date: {{form.deadlineDate}} </br>
+                Deadline Time: {{form.deadlineTime}} </br>
+                Contact Number: {{form.contact_number}} </br>
+                Resolved: {{form.is_resolved}} </br>
+                <div id="donated_by" class="d-none">
+                  Donated by: {{form.donated_by}} </br>
+                </div>
+                <button type="submit" class="btn btn-success">Update Post</button>              
+           </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% block script %}
+
+<script>
+  if(document.getElementById("is_resolved").checked){
+      document.getElementById("donated_by").classList.remove("d-none")
+  }
+  document.getElementById("is_resolved").addEventListener("change", (event) => {
+    if(event.target.checked){
+      document.getElementById("donated_by").classList.remove("d-none")
+    }
+    else {
+      document.getElementById("donated_by").classList.add("d-none")
+    }
+  })
+</script>
+{% endblock %}
+
+{% endblock %}

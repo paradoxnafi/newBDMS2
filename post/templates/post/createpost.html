@@ -1,0 +1,33 @@
+{% extends 'post/base.html' %}
+{% block title %} Make Post {% endblock %}
+{% block content %}
+
+<div class="container">
+        <div class="row">
+            <div class="col-6 offset-3 my-3">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Create New Post</b>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            Description: {{form.description}} </br>
+                            Address: {{form.address}} </br>
+                            Blood Group: {{form.blood_group}} </br>
+                            Required Bags: {{form.required_bags}} </br>
+                            Deadline Date: {{form.deadlineDate}} </br>
+                            Deadline Time: {{form.deadlineTime}} </br>
+                            Contact Number: {{form.contact_number}} </br>
+                            <button type="submit" class="btn btn-success">Create</button> </br>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+
+{% endblock %}
+

@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django-author = "==1.0.4"
+django-bootstrap4 = "==22.1"
+Django = "==4.0.3"
+Pillow = "==9.1.0"
+django-bootstrap-v5 = "*"
+reportlab = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"

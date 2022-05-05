@@ -1,0 +1,32 @@
+{% extends 'post/base.html' %}
+{% block title %} Update Profile {% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3 my-3">
+            <div class="card">
+                <div class="card-header">
+                    <b>Update Profile Informations</b>
+                </div>
+                <div class="card-body">
+					<form method="POST">
+						{% csrf_token %}
+							E-mail: {{form.email}} </br>
+							Username: {{form.username}}</br>
+							Name: {{form.name}}</br>
+							Contact Number: {{form.contact_number}}</br>
+							Address: {{form.address}}</br>
+							Date of Birth: {{form.date_of_birth}}</br>
+							NID Number {{form.nid}}</br>
+							Blood Group: {{form.blood_group}}</br>
+							<button type="submit" class="btn btn-success">Update Profile</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
