@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404  
 from django.contrib import messages
+from django.utils import timezone
 from datetime import date
 from django.core.mail import send_mail
 from django.conf import settings
@@ -130,21 +131,33 @@ def view_user(request, user_id):
 @login_required(login_url='loginUser')
 def edit_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    form = PostForm(instance=post)
+    if post.is_resolved != True:
+        form = PostForm(instance=post)
 
-    if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES, instance=post)
+        if request.method == 'POST':
+            form = PostForm(request.POST, request.FILES, instance=post)
 
-        if form.is_valid():
-            form.save()
-            post_id = post.id # (1) this line 
-            # messages.success(request, "Post updated successfully.")
-            return redirect(f'/posts/view/{post_id}') # (2) and this line fixed after edit redirect issue
+            if form.is_valid():
+                form.save()
+                donated_by = request.POST.getlist('donated_by')
+                
+                for item in donated_by:
+                    user = RegisterUser.objects.get(pk=item)
+                    user.donation_count += 1
+                    user.last_donated = (timezone.now())
+                    print(user.last_donated, user.donation_count)
+                    user.save()
 
-    return render(request, "post/edit_post.html", {
-        'post': post,
-        'form': form
-    })
+                post_id = post.id # (1) this line 
+                # messages.success(request, "Post updated successfully.")
+                return redirect(f'/posts/view/{post_id}') # (2) and this line fixed after edit redirect issue
+
+        return render(request, "post/edit_post.html", {
+            'post': post,
+            'form': form
+        })
+    else:
+        raise Http404
 
 @login_required(login_url='loginUser')
 def my_posts(request):

@@ -21,11 +21,30 @@
                 Deadline Time: {{form.deadlineTime}} </br>
                 Contact Number: {{form.contact_number}} </br>
                 Resolved: {{form.is_resolved}} </br>
-                
+                <div id="donated_by" class="d-none">
+                  Donated by: {{form.donated_by}} </br>
+                </div>
                 <button type="submit" class="btn btn-success">Update Post</button>              
            </form>
       </div>
     </div>
   </div>
 </div>
+{% block script %}
+
+<script>
+  if(document.getElementById("is_resolved").checked){
+      document.getElementById("donated_by").classList.remove("d-none")
+  }
+  document.getElementById("is_resolved").addEventListener("change", (event) => {
+    if(event.target.checked){
+      document.getElementById("donated_by").classList.remove("d-none")
+    }
+    else {
+      document.getElementById("donated_by").classList.add("d-none")
+    }
+  })
+</script>
+{% endblock %}
+
 {% endblock %}

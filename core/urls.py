@@ -27,3 +27,6 @@ urlpatterns = [
     path('', include('post.urls')),
     path('auth1/', include('auth1.urls')),
 ]
+
+
+handler404 = "auth1.views.handle_404"

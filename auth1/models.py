@@ -60,6 +60,8 @@ class RegisterUser(AbstractBaseUser):
 	is_active				= models.BooleanField(default=True)
 	is_staff				= models.BooleanField(default=False)
 	is_superuser			= models.BooleanField(default=False)
+	last_donated			= models.DateField(verbose_name='last_donated', auto_now_add=False, null=True, blank=True)
+	donation_count			= models.IntegerField(default=0)
 
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = ['username', 'password']

@@ -1,4 +1,5 @@
 from django.db import models
+from auth1.models import RegisterUser
 from author.decorators import with_author
 
 BLOOD_GROUPS = [
@@ -23,6 +24,7 @@ class Post(models.Model):
     contact_number = models.CharField(max_length=15)
     created_at = models.DateTimeField(auto_now_add=True)
     is_resolved = models.BooleanField(default=False, blank=True)
+    donated_by = models.ManyToManyField(RegisterUser, related_name='donated_by')
     admin_approved = models.BooleanField(default=False)
 
     def __str__(self):

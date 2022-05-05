@@ -130,3 +130,6 @@ def mark_as_read(request, pk):
     notification = Notification.objects.get(id=pk)
     notification.read_by.set(user)
     return redirect(f"/posts/view/{notification.context}")
+
+def handle_404(request, exception):
+    return render(request, 'auth1/404.html')
