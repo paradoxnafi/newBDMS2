@@ -24,7 +24,7 @@ class Post(models.Model):
     contact_number = models.CharField(max_length=15)
     created_at = models.DateTimeField(auto_now_add=True)
     is_resolved = models.BooleanField(default=False, blank=True)
-    donated_by = models.ManyToManyField(RegisterUser, related_name='donated_by')
+    donated_by = models.ManyToManyField(RegisterUser, related_name='donated_by', null=True, blank=True)
     admin_approved = models.BooleanField(default=False)
 
     def __str__(self):

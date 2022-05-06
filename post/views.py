@@ -98,18 +98,27 @@ def single_post(request, post_id):
 
     resetForm = CommentForm()
     updatedComment = Comment.objects.order_by('-created_at')
-
+    # Calculate age of request.user
     profile = RegisterUser.objects.get(id=request.user.id)
     born = request.user.date_of_birth
     today = date.today()
     age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+    # Calculate last donation since for request.user
+    last_donation_date = request.user.last_donated
+    if last_donation_date != None:
+        today = date.today()
+        delta = today - last_donation_date
+        days_since = delta.days
+    else:
+        days_since = ""
 
     return render(request, "post/single_post.html", {
         'post': post,
         'form': resetForm,
         'comment': updatedComment,
         'profile': profile,
-        'age': age
+        'age': age,
+        'days': days_since,
     })
 
 

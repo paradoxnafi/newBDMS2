@@ -75,13 +75,22 @@ def logoutUserView(request):
 def profileUserView(request):
 
     profile = RegisterUser.objects.get(id=request.user.id)
-
+    # Calculate age
     born = request.user.date_of_birth
     today = date.today()
     age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+    # Calculate last donation since
+    last_donation_date = request.user.last_donated
+    if last_donation_date != None:
+        today = date.today()
+        delta = today - last_donation_date
+        days_since = delta.days
+    else:
+        days_since = ""
     return render(request, 'auth1/profile.html', {
         'profile': profile,
         'age': age,
+        'days': days_since,
     })
 
 

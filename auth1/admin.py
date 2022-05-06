@@ -6,7 +6,7 @@ from django import forms
 from .models import RegisterUser, Notification
 
 class AccountAdmin(ModelAdmin):
-    list_display = ('email', 'username', 'blood_group', 'date_joined', 'last_login', 'is_admin', 'is_staff')
+    list_display = ('email', 'username', 'blood_group', 'donation_count', 'last_donated', 'date_joined', 'last_login', 'is_admin', 'is_staff')
     search_fields =('email', 'username', 'blood_group')
     readonly_fields = ('date_joined', 'last_login')
     exclude = ('password',)
