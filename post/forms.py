@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Post, Comment
+from .models import Post, Comment, Report
 
 from django import forms
 #from django.db import models
@@ -32,6 +32,24 @@ class CommentForm(ModelForm):
         for name, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control'})
         self.fields['body'].widget.attrs.update({'rows': '2'})
+
+class ReportForm(ModelForm):
+    class Meta:
+        model = Report
+        fields = ['time_since', 'download']
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'form-control'})
+        self.fields['body'].widget.attrs.update({'rows': '2'})
+
+
+
+
+
+
+
 
 
 # Post edit from

@@ -1,6 +1,8 @@
 from django.db import models
+from datetime import date
 from auth1.models import RegisterUser
 from author.decorators import with_author
+
 
 BLOOD_GROUPS = [
     ('A+', 'A+'),
@@ -38,4 +40,16 @@ class Comment(models.Model):
 
     def __str__(self):
         return str(self.author) + " commented at " + str(self.post.author) + "'s post" + ", " + str(self.body)
-        
+
+
+class Report(models.Model):
+    time_since = models.DateField()
+    download = models.URLField(max_length=200, blank=True, null=True, default='http://127.0.0.1:8000/Admin/generate_report')
+
+    # today = date.today()
+    # post_creation_date = Post.created_at.date()
+    
+
+    def __str__(self):
+        return "Report for" + str(self.time_since)
+   

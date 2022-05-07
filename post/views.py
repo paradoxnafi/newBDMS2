@@ -9,7 +9,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 import datetime
 from auth1.models import RegisterUser, Notification
-from .models import Post, Comment
+from .models import Post, Comment, Report
 from .forms import PostForm, CommentForm
 
 import io
@@ -45,12 +45,12 @@ def createpost(request):
         asking_blood_group = newform.blood_group
 
         users = RegisterUser.objects.filter(blood_group=asking_blood_group).exclude(id=request.user.id)
-        message = f"{request.user} needs {asking_blood_group},"
+        message = f"{request.user} needs {asking_blood_group} blood"
         notification = Notification.objects.create(message=message, context=newform.pk)
         notification.receiver.set(users)
 
         messages.success(request, "Your post is under review by an admin. It will be visible to everyone shortly.")
-        # Send email for creating new post.
+        #Send email for creating new post.
         # subject = "Your post is under review by and admin"
         # message = f" Hey {request.user.name}, your post is under review by an admin. It will be visible to everyone shortly. Click http://127.0.0.1:8000/posts/view/{newform.pk} to edit your post."
         # recipient = f"{request.user.email}"
@@ -202,19 +202,26 @@ def generatePDF(request):
     textob = c.beginText()
     textob.setTextOrigin(inch, inch)
     textob.setFont("Helvetica", 14)
-    
+
+    today = date.today()
+
     # Add to report
     lines = []
     number_of_users = RegisterUser.objects.count()
     number_of_posts = Post.objects.count()
     number_of_resolved_posts = Post.objects.filter(is_resolved = True).count()
     number_of_comments = Comment.objects.count()
-    print(number_of_posts)
+    number_of_donors = 0
+    number_of_donors = sum([int(items.donation_count) for items in RegisterUser.objects.all()])
+    # for items in RegisterUser.donation_count:
+    #     number_of_donors += int(items)
 
     lines.append(f'Total user count:          {number_of_users}')
     lines.append(f'Total post count:          {(number_of_posts)}')
     lines.append(f'Resolved post count:   {number_of_resolved_posts}')
+    lines.append(f'Total donor count:        {number_of_donors}')
     lines.append(f'Total comment count:  {number_of_comments}')
+
     lines.append(' ')
     lines.append(f'Generated from Django Admin at {datetime.datetime.now()} by "{request.user}"')
 

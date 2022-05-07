@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from django.db import models
-from .models import Post, Comment
+from .models import Post, Comment, Report
 
 class PostAdmin(ModelAdmin):
     ordering = ('created_at',)
@@ -14,5 +14,17 @@ class PostAdmin(ModelAdmin):
     list_filter = ()
     fieldsets = ()
 
+class ReportAdmin(ModelAdmin):
+    ordering = ('time_since',)
+    list_display = ('time_since', 'download')
+    search_fields = ('time_since',) # Can not add author as it is a foregin key to post
+    readonly_fields = ()
+    exclude = ('download',)
+
+    filter_horizontal = ()
+    list_filter = ()
+    fieldsets = ()
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment)
+admin.site.register(Report,ReportAdmin)

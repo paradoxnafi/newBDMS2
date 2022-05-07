@@ -22,7 +22,7 @@
                             <b>Date of Birth: </b>{{ profile.date_of_birth }}<br/>
                             <!-- <b>NID Number: </b>{{ profile.nid }}<br/> -->
                             <b>Blood group: </b>{{ profile.blood_group }}<br/>
-                            {% if last_donated == None %}
+                            {% if profile.last_donated == None %}
                                 <b>Last donation date: </b> Never <br>
                             {% else %}
                                 <b>Last donation date: </b>{{ profile.last_donated }} ({{days}} days ago) <br/>

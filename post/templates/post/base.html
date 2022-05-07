@@ -15,8 +15,8 @@
 
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="{% url 'home'%}"> <b class="text-primary"> Blood Donor
-				</b><span>Management</span> </a>
+			<a class="navbar-brand" href="{% url 'home'%}"> <b class="text-primary"> Blood Donor Management
+				</b></a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
 				data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
 				aria-label="Toggle navigation">
@@ -56,6 +56,7 @@
 								<a href="/auth1/mark_as_read/{{notification.id}}" class="text-decoration-none">
 									<div class="mb-2">{{ notification.message }}</div>
 									<div class="mb-2">{{ notification.creation_date|timesince }} ago</div>
+									<!-- bg-info text-dark -->
 
 								</a>
 							</li>

@@ -44,7 +44,7 @@ def registerUserView(request):
             account = authenticate(email=email, password=raw_password)
             login(request, account)
 
-            # Send email for new registration
+            #Send email for new registration
             # subject = "Account created successfuly"
             # message = f" Hey {request.user.name}, your account was created successfuly. Click http://127.0.0.1:8000/ to continue to visit Blood Donor System"
             # recipient = f"{request.user.email}"
