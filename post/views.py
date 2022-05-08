@@ -216,11 +216,13 @@ def generatePDF(request):
     # for items in RegisterUser.donation_count:
     #     number_of_donors += int(items)
 
-    lines.append(f'Total user count:          {number_of_users}')
-    lines.append(f'Total post count:          {(number_of_posts)}')
-    lines.append(f'Resolved post count:   {number_of_resolved_posts}')
-    lines.append(f'Total donor count:        {number_of_donors}')
-    lines.append(f'Total comment count:  {number_of_comments}')
+    lines.append(f'Total user count:             {number_of_users}')
+    lines.append(f'Total post count:             {(number_of_posts)}')
+    lines.append(f'Resolved post count:      {number_of_resolved_posts}')
+    lines.append(f'Total donor count:           {number_of_donors}')
+    lines.append(f'Bags of blood donated:   {number_of_donors}')
+    lines.append(f'Total comment count:     {number_of_comments}')
+    
 
     lines.append(' ')
     lines.append(f'Generated from Django Admin at {datetime.datetime.now()} by "{request.user}"')
