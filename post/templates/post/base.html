@@ -38,13 +38,12 @@
 						<a type="button" class="nav-link position-relative me-3 " data-bs-toggle="dropdown"
 							aria-expanded="false" href="/auth1/user/{{user.id}}/notifications">
 							Notifications
-							
-							<span
-								class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger">
-								{{ total_unread_notifications }}
-
-							</span>
-							
+							{% if total_unread_notifications != 0 %}
+								<span
+									class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger">
+									{{ total_unread_notifications }}
+								</span>
+							{% endif %}
 						</a>
 
 						

@@ -45,16 +45,16 @@ def registerUserView(request):
             login(request, account)
 
             #Send email for new registration
-            # subject = "Account created successfuly"
-            # message = f" Hey {request.user.name}, your account was created successfuly. Click http://127.0.0.1:8000/ to continue to visit Blood Donor System"
-            # recipient = f"{request.user.email}"
-            # send_mail(
-            #     subject,
-            #     message,
-            #     settings.EMAIL_HOST_USER,
-            #     [recipient],
-            #     fail_silently = False
-            # )
+            subject = "Account created successfuly"
+            message = f" Hey {request.user.name}, your account was created successfuly. Click http://127.0.0.1:8000/ to continue to visit Blood Donor System"
+            recipient = f"{request.user.email}"
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [recipient],
+                fail_silently = False
+            )
 
             return redirect('home')
             

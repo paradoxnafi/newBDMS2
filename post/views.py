@@ -51,16 +51,16 @@ def createpost(request):
 
         messages.success(request, "Your post is under review by an admin. It will be visible to everyone shortly.")
         #Send email for creating new post.
-        # subject = "Your post is under review by and admin"
-        # message = f" Hey {request.user.name}, your post is under review by an admin. It will be visible to everyone shortly. Click http://127.0.0.1:8000/posts/view/{newform.pk} to edit your post."
-        # recipient = f"{request.user.email}"
-        # send_mail(
-        #     subject,
-        #     message,
-        #     settings.EMAIL_HOST_USER,
-        #     [recipient],
-        #     fail_silently = False
-        # )
+        subject = "Your post is under review by and admin"
+        message = f" Hey {request.user.name}, your post is under review by an admin. It will be visible to everyone shortly. Click http://127.0.0.1:8000/posts/view/{newform.pk} to edit your post."
+        recipient = f"{request.user.email}"
+        send_mail(
+            subject,
+            message,
+            settings.EMAIL_HOST_USER,
+            [recipient],
+            fail_silently = False
+        )
 
         return redirect('home')
 
