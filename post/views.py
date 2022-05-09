@@ -99,19 +99,25 @@ def single_post(request, post_id):
     resetForm = CommentForm()
     updatedComment = Comment.objects.order_by('-created_at')
     # Calculate age of request.user
-    profile = RegisterUser.objects.get(id=request.user.id)
-    born = request.user.date_of_birth
-    today = date.today()
-    age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-    # Calculate last donation since for request.user
-    last_donation_date = request.user.last_donated
-    if last_donation_date != None:
+    try:
+        profile = RegisterUser.objects.get(id=request.user.id)
+        born = request.user.date_of_birth
         today = date.today()
-        delta = today - last_donation_date
-        days_since = delta.days
-    else:
-        days_since = ""
-
+        age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+        # Calculate last donation since for request.user
+        last_donation_date = request.user.last_donated
+        if last_donation_date != None:
+            today = date.today()
+            delta = today - last_donation_date
+            days_since = delta.days
+        else:
+            days_since = ""
+    except:
+        return render(request, "post/single_post.html", {
+        'post': post,
+        'form': resetForm,
+        'comment': updatedComment,
+    })
     return render(request, "post/single_post.html", {
         'post': post,
         'form': resetForm,
@@ -240,7 +246,7 @@ def generatePDF(request):
     else:
         return HttpResponse("<p> You are not authorization to view this page")
 
-# send notification and email after post is approved
+# send notification and email after post is approved (Not using. Dont uncommnet)
 # def if_post_approved(request):
     # users = RegisterUser.objects.filter(blood_group=asking_blood_group).exclude(id=request.user.id)
     # message = f"{request.user} needs {asking_blood_group},"
