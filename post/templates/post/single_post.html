@@ -101,6 +101,23 @@
         </div>
         {% elif post.is_resolved %}
           <div class="bg-success p-1 text-white">This post has been Resolved</div>
+        {% elif request.user == post.author %}
+          <div class="card-header">
+            <b>Add a comment</b>
+          </div>
+          <div class="card-body">
+            <form action="" method="post">
+              {% csrf_token %} {% for field in form %}
+              <div class="mb-3">{{ field }}</div>
+
+              <div class="text-rose-600 text-xs">{{ field.errors }}</div>
+              {% endfor %}
+
+              <div class="flex justify-between items-center mt-8">
+                <button type="submit" class="btn btn-success">Submit</button>
+              </div>
+            </form>
+          </div>  
         {% elif days < 90 %}
           <div class="bg-secondary p-1 text-white">Your last donation was less than 90 days ago</div>
         {% else %}
